@@ -1,4 +1,4 @@
-import { API_KEY } from "./config";
+import { API_KEY } from "./config.js";
 
 let locationInput = '90302';
 
