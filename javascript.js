@@ -1,3 +1,5 @@
+import { API_KEY } from "./config";
+
 let locationInput = '90302';
 
 const searchForm = document.querySelector('#search');
@@ -7,33 +9,40 @@ searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   locationInput = searchInput.value;
-  getWeatherData(locationInput);
+  getTheWeather(locationInput);
 
 });
 
 async function getTheWeather(locationInput) {
   const weatherData = await getWeatherData(locationInput);
   const filteredData = await filterWeatherData(weatherData);
-  console.log(filteredData);
 }
 
 async function getWeatherData(locationInput) {
   const url = getSearchUrl(locationInput);
-  const response = await fetch(url, { mode: 'cors' });
-  const weatherData = await response.json()
-  return weatherData;
+
+  try {
+    const response = await fetch(url, { mode: 'cors' });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    const weatherData = await response.json()
+    return weatherData;
+  } catch (error) {
+    console.error('Error fetching weather data', error);
+  }
 }
+
 
 function getSearchUrl(locationInput) {
   const locationString = encodeURIComponent(locationInput);
-  const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${locationString}`
+  const url = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${locationString}`
   return url;
 }
 
 async function filterWeatherData(weatherData) {
-  const weatherData = await getWeatherData(locationInput);
-  console.log(weatherData);
-
   // Get location information
   const name = weatherData.location.name;
   const region = weatherData.location.region;
@@ -45,6 +54,7 @@ async function filterWeatherData(weatherData) {
   const celsius = weatherData.current.temp_c;
   const conditionDescription = weatherData.current.condition.text;
   const iconUrl = weatherData.current.condition.icon;
+  const isDay = weatherData.current.is_day;
 
   const filteredData = {
     location: {
@@ -58,9 +68,9 @@ async function filterWeatherData(weatherData) {
       celsius: celsius,
       conditionDescription: conditionDescription,
       iconUrl: iconUrl,
+      isDay: isDay
     }
   }
   console.log(filteredData);
 }
 
-getWeatherData(locationInput);
