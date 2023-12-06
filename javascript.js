@@ -23,10 +23,19 @@ async function displayWeatherData(filteredData) {
   const conditionDescriptionDiv = document.querySelector('.description');
 
   cityDiv.textContent = filteredData.location.city;
-  currentTimeDiv.textContent = filteredData.location.localTime;
-  temperatureDiv.textContent = filteredData.current.fahrenheit;
+  currentTimeDiv.textContent = extractTime(filteredData.location.localTime);
+  temperatureDiv.textContent = roundInteger(filteredData.current.fahrenheit) + '°';
   conditionIcon.src = filteredData.current.iconUrl;
   conditionDescriptionDiv.textContent = filteredData.current.conditionDescription;
+}
+
+function roundInteger(string) {
+  const number = parseFloat(string);
+  return Math.round(number);
+}
+
+function extractTime(dateTimeString) {
+  return dateTimeString.split(' ')[1];
 }
 
 
