@@ -5,18 +5,30 @@ let locationInput = '90302';
 const searchForm = document.querySelector('#search');
 const searchInput = document.querySelector('input');
 
-searchForm.addEventListener('submit', (event) => {
+searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   locationInput = searchInput.value;
-  getTheWeather(locationInput);
-
-});
-
-async function getTheWeather(locationInput) {
   const weatherData = await getWeatherData(locationInput);
   const filteredData = await filterWeatherData(weatherData);
+  await displayWeatherData(filteredData);
+});
+
+
+async function displayWeatherData(filteredData) {
+  const cityDiv = document.querySelector('.city');
+  const currentTimeDiv = document.querySelector('.current-time');
+  const temperatureDiv = document.querySelector('.temperature');
+  const conditionIcon = document.querySelector('.icon');
+  const conditionDescriptionDiv = document.querySelector('.description');
+
+  cityDiv.textContent = filteredData.location.city;
+  currentTimeDiv.textContent = filteredData.location.localTime;
+  temperatureDiv.textContent = filteredData.current.fahrenheit;
+  conditionIcon.src = filteredData.current.iconUrl;
+  conditionDescriptionDiv.textContent = filteredData.current.conditionDescription;
 }
+
 
 async function getWeatherData(locationInput) {
   const url = getSearchUrl(locationInput);
@@ -71,6 +83,6 @@ async function filterWeatherData(weatherData) {
       isDay: isDay
     }
   }
-  console.log(filteredData);
+  return filteredData;
 }
 

@@ -11,12 +11,31 @@
 </head>
 
 <body>
-  <div class="search-container">
-    <form action="" id="search">
-      <input type="text" placeholder="Search by City or Postal Code" required />
-      <button id="search-btn" type="submit">Search</button>
-    </form>
+
+  <div class="flex-container">
+
+    <!-- Search form -->
+    <div class="search-container">
+      <form action="" id="search">
+        <input type="text" placeholder="Search by City or Postal Code" required />
+        <button id="search-btn" type="submit">Search</button>
+      </form>
+    </div>
+
+    <!-- Display weather data -->
+    <div class="weather-container">
+      <div class="city"></div>
+      <div class="current-time"></div>
+      <div class="temperature"></div>
+      <div class="condition">
+        <img class="icon" src="" alt="">
+        <div class="description"></div>
+      </div>
+    </div>
+
   </div>
+
+
 </body>
 
 </html>
