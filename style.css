@@ -18,6 +18,7 @@ form {
 input {
   width: 100%;
   height: 24px;
+  padding: 8px;
 }
 
 .weather-container {
@@ -26,12 +27,20 @@ input {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: rgb(0, 119, 255);
+  border: 1px solid rgb(177, 198, 219);
   border-radius: 16px;
   margin-top: 24px;
   color: #fff;
   height: 180px;
   box-sizing: border-box;
+}
+
+.day {
+  background: linear-gradient(180deg, #084785, #759FC9);
+}
+
+.night {
+  background: linear-gradient(180deg, #121329, #32355b);
 }
 
 .location-info {
@@ -71,4 +80,72 @@ input {
 img {
   height: 40px;
   margin-right: 4px;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+/* Temperature toggle */
+
+.temperature-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.temperature-toggle input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.temperature-toggle label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* Color when switched to Fahrenheit */
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.temperature-toggle label:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+  -webkit-transform: translateX(26px); /* Start on the right */
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.temperature-toggle input:checked + label {
+  background-color: #ccc; /* Background of the switch */
+}
+
+.temperature-toggle input:checked + label:before {
+  -webkit-transform: translateX(0); /* Slide to left */
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+
+
+.temp-label {
+  font-size: 20px;
+  color: #a9a8a8;
 }

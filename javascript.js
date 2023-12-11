@@ -1,9 +1,11 @@
 import { API_KEY } from "./config.js";
 
 let locationInput = '90302';
+let currentTempToggle = 'fahrenheit';
 
 const searchForm = document.querySelector('#search');
 const searchInput = document.querySelector('input');
+const tempToggle = document.querySelector('#temp-toggle');
 
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -15,18 +17,43 @@ searchForm.addEventListener('submit', async (event) => {
 });
 
 
+tempToggle.addEventListener('change', () => {
+  if(tempToggle.checked) {
+      currentTempToggle = 'celsius'
+  } else {
+      currentTempToggle = 'fahrenheit'
+  }
+
+  updateTheWeather();
+});
+
+
 async function displayWeatherData(filteredData) {
   const cityDiv = document.querySelector('.city');
   const currentTimeDiv = document.querySelector('.current-time');
   const temperatureDiv = document.querySelector('.temperature');
   const conditionIcon = document.querySelector('.icon');
   const conditionDescriptionDiv = document.querySelector('.description');
+  const backgroundDiv = document.querySelector('.weather-container');
 
   cityDiv.textContent = filteredData.location.city;
   currentTimeDiv.textContent = extractTime(filteredData.location.localTime);
-  temperatureDiv.textContent = roundInteger(filteredData.current.fahrenheit) + '°';
   conditionIcon.src = filteredData.current.iconUrl;
   conditionDescriptionDiv.textContent = filteredData.current.conditionDescription;
+
+  if (currentTempToggle === 'fahrenheit') {
+    temperatureDiv.textContent = roundInteger(filteredData.current.fahrenheit) + '°';
+  } else {
+    temperatureDiv.textContent = roundInteger(filteredData.current.celsius) + '°';
+  }
+  
+  if (filteredData.current.isDay === 1) {
+    backgroundDiv.classList.remove('night');
+    backgroundDiv.classList.add('day');
+  } else {
+    backgroundDiv.classList.remove('day');
+    backgroundDiv.classList.add('night');
+  }
 }
 
 function roundInteger(string) {
@@ -60,6 +87,7 @@ async function getWeatherData(locationInput) {
 function getSearchUrl(locationInput) {
   const locationString = encodeURIComponent(locationInput);
   const url = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${locationString}`
+  locationInput = locationString;
   return url;
 }
 
@@ -95,3 +123,12 @@ async function filterWeatherData(weatherData) {
   return filteredData;
 }
 
+getWeatherData(locationInput);
+
+async function updateTheWeather() {
+  const weatherData = await getWeatherData(locationInput);
+  const filteredData = await filterWeatherData(weatherData);
+  await displayWeatherData(filteredData);
+}
+
+updateTheWeather();
